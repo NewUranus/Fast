@@ -45,8 +45,21 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-app.on('ready', async() => {
+app.on('ready', function() {
+  onReady();
+});
+
+function startup(){
   globalShortcut.register('Alt+B', function(){
     BrowserWindow.getFocusedWindow().hide()
   })
-});
+}
+
+async function onReady()
+{
+  try {
+    startup();
+  } catch (error){
+    console.error(error);
+  }
+}
