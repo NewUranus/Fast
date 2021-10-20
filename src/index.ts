@@ -6,14 +6,22 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
+function mainWindowClose()
+{
+
+}
+
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 60,
     width: 300,
     frame: false,
-    resizable: false
+    maximizable: false,
+    minimizable: false
   });
+
+  mainWindow.on("closed", mainWindowClose);
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, '../src/index.html'));
@@ -46,21 +54,15 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-app.on('ready', function() {
-  onReady();
-});
-
-function startup(){
+app.on('ready', async() => {
   globalShortcut.register('Alt+B', function(){
-    BrowserWindow.getFocusedWindow().hide()
+    if(BrowserWindow.getFocusedWindow().isVisible)
+    {
+      BrowserWindow.getFocusedWindow().hide()
+    }
+    else
+    (
+      BrowserWindow.getFocusedWindow().show()
+    )
   })
-}
-
-async function onReady()
-{
-  try {
-    startup();
-  } catch (error){
-    console.error(error);
-  }
-}
+});
